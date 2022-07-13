@@ -1,0 +1,26 @@
+# Lecture 1: Introduction & Matrix Multiplication
+
+- Performance is the *currency* of computing
+  - Needed software properties can be "bought" with performance (e.g. compatibility, debuggability, maintainability, portability)
+- Avoid prematurely optimizing programs
+- Modern multicore processor contains: parallel-processing cores, vector units, caches, prefetchers, hyperthreading, frequency scaling, etc.
+- Python and other interpreted languages are slow
+  - C and other compiled languages are translated directly to machine code
+  - Java is compiled to byte-code, which is then interpreted and just-in-time (JIT) compiled to machine code
+    - Whenever some piece of code executes sufficiently frequently, will get comiled to machine code in real-time
+- Each processor reads/writes main memory in contiguous blocks called cache lines
+  - Previously accessed cache lines stored in smaller memory (called cache) sitting near the processor
+  - Cache hits (accesses to data in cache) are fast
+  - Cache misses (accesses to data not in cache) are slow
+- Proper memory access patterns can greatly improve performance of memory-bound segments
+  - Use something like `valgrind --tool=cachegrind ./prog` to measure last-level-cache miss rate
+- Compilers often provide collections of optimizations switches that can trivially increase performance of most programs
+- Parallelization of work allows usage of all cores simulatenously (harder for most non-trivial scenarios)
+  - Rule of thumb: parallelize outer loops rather than inner loops
+- Restructure computation to reuse data in cache as much as possible (e.g. tiling in matrix multiplication)
+  - Can optimize for multiple levels of caches (harder because it cannot be done via binary search)
+- Recursion (e.g. via divide-and-conquer) can also improve performance
+  - Coarsen base cases to overcome function-call overheads
+- Modern microprocessors incorporate vector hardware to process data in SIMD (single-instruction stream, multiple-data stream) fashion
+  - Parallel vector lanes operate synchronously on words in a vector register
+  - Often must explicitly direct compiler to use modern vector instructions using compiler flags (e.g. `-march=native -ffast-math`)
