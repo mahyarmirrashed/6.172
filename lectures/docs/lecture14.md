@@ -1,0 +1,40 @@
+# Lecture 14: Caching and Cache-Efficient Algorithms
+
+- Caches stored in multi-core hierarchy:
+  - L1 cache, fastest, separate L1-instruction and L1-data caches
+  - L2 cache, slower but still slower
+  - L3 cache, slowest cache but much faster than main memory still
+  - Main memory, very high latency but much larger size
+- Caches have three important properties:
+  - $w$: number of bits in address space
+  - $M$: cache size in bytes
+  - $B$: line/block size
+- Fully associative cache
+  - Cache blocks can reside anywhere in cache
+  - Finding blocks requires exhaustive, $O(n)$, search for tags
+  - Blocks are evicted with respect to replacement policy (proprietary, usually)
+- Direct-mapped cache
+  - Cache block's set determines its location in cache
+  - Addresses are stored according to following:
+    - Tag: $w-\lg M$
+    - Set: $\lg\left(M/B\right)$
+    - Offset: $\lg B$
+- Set-associative cache (most use this)
+  - Cache block's set determines $k$ possible cache locations
+  - Reduces search computational complexity from $O(n)$ to $O(1)$
+- Cache miss taxonomy:
+  - Cold miss: first time cache block accessed
+  - Capacity miss: previous cached copy would have been evicted even with fully associative cache
+  - Conflict miss: too many blocks from same cache set (would not have been evicted with fully associative cache)
+  - Sharing miss: another processor acquired exclusive access to cache block
+    - True-sharing miss: two processors are accessing same data on cache line
+    - False-sharing miss: two processors are accessing different data happen to reside on same cache line
+- Conflict misses especially problematic for caches with limited associativity (e.g. submatrix multiplication)
+  - Padding matrices or copying into temporary matrices can mitigate these issues
+- For asymptotic analyses, assume LRU cache replacement policy
+- Cache-oblivious algorithms
+  - No voodoo tuning parameters (huge time-saver)
+  - No explicit knowledge of caches
+  - Passively autotunes itself
+  - Handles multilevel caches automatically
+  - Great in multi-programmed environments
